@@ -49,16 +49,6 @@ traitsfinal<-traitsfinal[sample(nrow(traitsfinal)),]
 
 } 
 
-if(model_ == "conserved"){
-#need to fix
-traits<-sim.char(phylo,uncorr,nsim = 1, model = "BM", root = 1) #traits is an array, oddly enough
-traits.stand<-decostand(traits[,1,1],"range") #normalizes the H trait b/w 0 and 1
-traits.stand2<-decostand(traits[,2,1],"standardize")
-traits.stand2_fixed <- ((eff_sd)*traits.stand2)+(eff_mean) #makes e a normal r.v. with mean = 0.2, s.d. = 0.005
-traitsfinal<-cbind(traits.stand, traits.stand2_fixed)
-} 
-
-
 #trait values -> model parameters
 #species environmental optima (H)
 if(eff_vary==T){eOptimum<-traitsfinal[,1]} else{
