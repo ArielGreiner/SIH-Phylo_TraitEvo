@@ -8,7 +8,7 @@ DispV<-c(0.0001,0.0005,0.001,0.005,0.01,0.05,0.1,0.5,1) #the dispersal rates
 TraitEvo<-c("BM", "random")  
 reps <- seq(from = 1, to = nreplicates, by = 1)
 
-Data_storage<-data.frame(SR=NA,Biomass=NA,Biomass_CV=NA,PD=NA,MPD_abund=NA,MPD_pa=NA,MNTD_pa = NA, MNTD_abund=NA,beta_MPDabund =NA, beta_MNTDabund=NA,sesMPD_abund_z = NA, sesMNTD_abund_z = NA, sesMPD_abund_p = NA, sesMNTD_abund_p = NA,phylogeven_mpd = 0,phylogeven_mntd = 0,phylogcluster_mpd = 0, phylogcluster_mntd = 0, Kstat = NA, shannonhill = NA, shannonhillbeta = NA, speciessorting = NA, masseffects = NA, basegrowth = NA, Dispersal=rep(DispV,each=nreplicates*length(TraitEvo)),TEvoModel=factor(TraitEvo), ReplicateNum=rep(reps,each=length(TraitEvo)),
+Data_storage<-data.frame(SR=NA,Biomass=NA,Biomass_CV=NA,PD=NA,MPD_abund=NA,MPD_pa=NA,MNTD_pa = NA, MNTD_abund=NA, Kstat = NA, shannonhill = NA, shannonhillbeta = NA, speciessorting = NA, masseffects = NA, basegrowth = NA, Dispersal=rep(DispV,each=nreplicates*length(TraitEvo)),TEvoModel=factor(TraitEvo), ReplicateNum=rep(reps,each=length(TraitEvo)),
 Scale=rep(c("Local","Regional"),each=length(DispV)*nreplicates*length(TraitEvo))) #building the data frame
 
 MTraits<-t(matrix(1,nspecies,nfunctions))
@@ -40,7 +40,9 @@ for(i in 1:length(DispV)){
   com_data<-t(SIH_data[["Abund",i]][400,,])
   colnames(com_data)<-1:nspecies
   SIH_data[["phylo",i]]$tip.label <- 1:nspecies
-  Data_storage$Kstat[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"]<- mean(Kcalc(x=interspec_mat,SIH_data[["phylo",i]])) #calculating K statistic, not sure if should take the mean of all of the values 
+  x = interspec_mat
+  phy = SIH_data[["phylo", i]]
+  Data_storage$Kstat[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"]<- mean(Kcalc(x=interspec_mat,phy=SIH_data[["phylo",i]])) #calculating K statistic, not sure if should take the mean of all of the values 
   
   Data_storage$PD[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Local"]<-mean(pd(com_data,SIH_data[["phylo",i]])$PD) 
   Data_storage$MPD_abund[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Local"]<-mean(mpd(com_data,cophenetic(SIH_data[["phylo",i]]),abundance.weighted = T)) 
@@ -78,9 +80,8 @@ Data_storage$shannonhillbeta[Data_storage$Dispersal==DispV[i] & Data_storage$TEv
     Data_storage$masseffects[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"]<-SIH_data[["Meta_dyn",i]][400,,]$Mass_effects
       Data_storage$basegrowth[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"]<-SIH_data[["Meta_dyn",i]][400,,]$Base_growth 
     
-  }
-  }
-  
+}
+}
 }
 
 #going to have to fix the total data storage thing big time
