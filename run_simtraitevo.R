@@ -13,7 +13,13 @@ Scale=rep(c("Local","Regional"),each=length(DispV)*nreplicates*length(TraitEvo))
 
 MTraits<-t(matrix(1,nspecies,nfunctions))
 for(l in 1:length(TraitEvo)){
+	if(l == 2){
+		browser()
+	}
 for(j in 1:nreplicates){
+	if(j == 50){
+		browser()
+	}
 #runs the SIH model at all dispersal rates in DispV and saves the abundances and productivity in a list
 set.seed(j)
 eff_sd <- 0.005
