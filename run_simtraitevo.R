@@ -59,11 +59,13 @@ for(k in 1:npatches){
 		relabund <- com_data[k,m]/sum(com_data[k,])
 		shannon_alpha[k,i][is.na(shannon_alpha[k,i])] <- 0 #checks if NA and replaces with 0
 		shannon_alpha[k,i] <- relabund*log(relabund) + shannon_alpha[k,i]
-		gammaabund <- sum(com_data[,m])/sum(com_data)
+		gammaabund <- sum(com_data[,m])/sum(com_data) #could only calculate this when k = 1...
 		shannon_gamma[i][is.na(shannon_gamma[i])] <- 0
 		shannon_gamma[i] <- gammaabund*log(gammaabund) + shannon_gamma[i]
 	}	
+	shannon_alpha[k,i] <- -(shannon_alpha[k,i])
 }
+shannon_gamma[i] <- -(shannon_gamma[i])
 avgshannon_a <- prod(exp(shannon_alpha[,i]))^(1/length(shannon_alpha[,i]))
 Data_storage$shannonhill[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Local"] <- avgshannon_a	
 Data_storage$shannonhill[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"] <- exp(shannon_gamma[i])
