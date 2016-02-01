@@ -71,6 +71,6 @@ facet_grid(TEvoModel~.,scale="free")+
  
  
 
-#ignore under here
+#ignore under here, it doesn't work as it should...
 Meta_dynamics<-data.frame(Mean_Proportion_of_Production=c(Data_storage_total$Mean_basegrowth,Data_storage_total$Mean_speciessorting,Data_storage_total$Mean_masseffects),SD_Proportion_of_Production=c(Data_storage_total$SD_basegrowth,Data_storage_total$SD_speciessorting,Data_storage_total$SD_masseffects),Dynamic=rep(c("Base growth","Species sorting","Mass effects"), each=length(DispV)*length(TraitEvo)), TraitEvoModel=rep(c("BM","random","conserved"), each=length(DispV)), Mean_MPD_abund = Data_storage_total$Mean_MPD_abund, SD_MPD_abund = Data_storage_total$SD_MPD_abund, Dispersal=rep(DispV,each=nreplicates*length(TraitEvo)),TEvoModel=factor(TraitEvo), ReplicateNum=rep(reps,each=length(TraitEvo)),
 Scale=rep(c("Local","Regional"),each=length(DispV)*nreplicates*length(TraitEvo)))
