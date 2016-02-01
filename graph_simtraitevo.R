@@ -3,14 +3,6 @@ Data_storage_total<-summarise(group_by(Data_storage, Dispersal, TEvoModel, Scale
 
 require(ggplot2)
 #MPD abund vs dispersal rates and then look at 3 different levels of relationship between traits and the phylogeny
-ggplot(Data_storage_total,aes(x=Dispersal,y=Mean_MPD_abund,group=TEvoModel,color=TEvoModel, fill=TEvoModel,alpha=0.1))+
-  geom_line(size=1.5)+
-  geom_ribbon(aes(ymin=Mean_MPD_abund-SD_MPD_abund,ymax=Mean_MPD_abund+SD_MPD_abund),width=0.1)+
-  theme_bw(base_size = 15)+
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
-  scale_x_log10(breaks=DispV)+
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
-
 ggplot(Data_storage_total,aes(x=Dispersal,y=Mean_SR,color=interaction(Scale, TEvoModel),group=interaction(Scale, TEvoModel),fill=interaction(Scale, TEvoModel),alpha=0.1))+
   geom_line(size=2)+ #plots data as lines
   geom_ribbon(aes(ymin=Mean_SR-SD_SR,ymax=Mean_SR+SD_SR),width=0.1)+
@@ -26,6 +18,7 @@ ggplot(Data_storage_total,aes(x=Mean_speciessorting,y=Mean_MPD_abund,group=TEvoM
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
   scale_x_log10(breaks=DispV)+
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
 
 ggplot(Data_storage_total,aes(x=Dispersal,y=Mean_MPD_abund,group=interaction(TEvoModel, Scale),color=interaction(TEvoModel,Scale),fill=interaction(TEvoModel, Scale),alpha=0.1))+
   geom_line(size=1.5)+
