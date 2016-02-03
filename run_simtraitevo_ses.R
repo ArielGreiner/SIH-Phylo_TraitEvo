@@ -1,7 +1,7 @@
 require(geiger)
-nspecies<-7 #the number of species
-npatches<-10 #the number of patches
-nreplicates<-100 #number of replicates
+nspecies<-20 #the number of species
+npatches<-30 #the number of patches
+nreplicates<-15 #number of replicates
 nfunctions<-1
 
 DispV<-c(0.0001,0.0005,0.001,0.005,0.01,0.05,0.1,0.5,1) #the dispersal rates
