@@ -60,6 +60,8 @@ eOptimum2<-traitsfinal[,2]
 	eOptimum2<-1-seq(0,eAMP, by=eAMP/(species-1)) #this might not work
 	}
 
+#new environmental dimension
+envt.v2 <- 1-seq(0,eAMP, by=eAMP/(patches-1))
 #species consumption efficiency - modified!!!	
 #species consumption efficiency (below)
 eff<-rep(eff,species) #still a vector, but all just one value now 
@@ -77,10 +79,11 @@ eff<-rep(eff,species) #still a vector, but all just one value now
    Meta_dyn<-data.frame(Species_sorting=rep(NA,40000),Mass_effects=NA,Base_growth=NA)
   Species_data<-array(NA,dim=c(40000,species,2),dimnames = list(1:40000,1:species,c("Abundance","Occupancy")))
   
+  
   for(TS in 1:Tmax){
     Immigrants<-calc.immigration(N,dispersal,dispersal_matrix)
     envt.v<-0.5*eAMP*(sin((2*pi/ePeriod)*TS+1+(1:patches)*2*pi/patches)+1)
-    consume <- 0.05*((1.5-abs(sapply(eOptimum1,'-',envt.v))) + (1.5-abs(sapply(eOptimum2,'-',envt.v))))
+    consume <- 0.05*((1.5-abs(sapply(eOptimum1,'-',envt.v))) + (1.5-abs(sapply(eOptimum2,'-',envt.v2))))
     Nt <- N*(1+DT*(rep(eff,each=patches)*R*consume - dispersal - mort)) + DT*Immigrants #abundance step
     Immigrants0<-calc.immigration(N0,0,dispersal_matrix)
     Nt0 <- N0*(1+DT*(rep(eff,each=patches)*R0*consume - 0 - mort)) + DT*Immigrants0
