@@ -8,7 +8,7 @@ DispV<-c(0.0001,0.0005,0.001,0.005,0.01,0.05,0.1,0.5,1) #the dispersal rates
 TraitEvo<-c("BM", "random")  
 reps <- seq(from = 1, to = nreplicates, by = 1)
 
-Data_storage<-data.frame(SR=NA,Biomass=NA,Biomass_CV=NA,PD=NA,MPD_abund=NA,MPD_pa=NA,MNTD_pa = NA, MNTD_abund=NA, Kstat = NA, shannonhill = NA, shannonhillbeta = NA, speciessorting = NA, masseffects = NA, basegrowth = NA, altshannonhill = NA, altshannonhillbeta = NA, Dispersal=rep(DispV,each=nreplicates*length(TraitEvo)),TEvoModel=factor(TraitEvo), ReplicateNum=rep(reps,each=length(TraitEvo)),
+Data_storage<-data.frame(SR=NA,Biomass=NA,Biomass_CV=NA,PD=NA,MPD_abund=NA,MPD_pa=NA,MNTD_pa = NA, MNTD_abund=NA, Kstat = NA, shannonhill = NA, shannonhillbeta = NA, speciessorting = NA, masseffects = NA, basegrowth = NA, Dispersal=rep(DispV,each=nreplicates*length(TraitEvo)),TEvoModel=factor(TraitEvo), ReplicateNum=rep(reps,each=length(TraitEvo)),
 Scale=rep(c("Local","Regional"),each=length(DispV)*nreplicates*length(TraitEvo))) #building the data frame
 
 MTraits<-t(matrix(1,nspecies,nfunctions))
@@ -54,30 +54,13 @@ for(i in 1:length(DispV)){
    Data_storage$MNTD_pa[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Local"]<-mean(mntd(com_data,cophenetic(SIH_data[["phylo",i]]),abundance.weighted = F))
    
 #alpha, beta, gamma
-for(k in 1:npatches){
-	for(m in 1:nspecies){
-		relabund <- com_data[k,m]/sum(com_data[k,])
-		shannon_alpha[k,i][is.na(shannon_alpha[k,i])] <- 0 #checks if NA and replaces with 0
-		shannon_alpha[k,i] <- relabund*log(relabund) + shannon_alpha[k,i]
-		gammaabund <- sum(com_data[,m])/sum(com_data) #could only calculate this when k = 1...
-		shannon_gamma[i][is.na(shannon_gamma[i])] <- 0
-		shannon_gamma[i] <- gammaabund*log(gammaabund) + shannon_gamma[i]
-	}	
-	shannon_alpha[k,i] <- -(shannon_alpha[k,i])
-}
-shannon_gamma[i] <- -(shannon_gamma[i])
-avgshannon_a <- prod(exp(shannon_alpha[,i]))^(1/length(shannon_alpha[,i]))
-Data_storage$shannonhill[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Local"] <- avgshannon_a	
-Data_storage$shannonhill[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"] <- exp(shannon_gamma[i])
-Data_storage$shannonhillbeta[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"]<- exp(shannon_gamma[i])/avgshannon_a
-
 #alternate method of calculating
 renyi_avgshannon_a <- prod(renyi(com_data,scales=1, hill=T))^(1/npatches)
-Data_storage$altshannonhill[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Local"] <- renyi_avgshannon_a
+Data_storage$shannonhill[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Local"] <- renyi_avgshannon_a
 regional_data <- colSums(com_data)
 renyi_shannon_gamma <- renyi(regional_data,scales=1, hill=T)
-Data_storage$altshannonhill[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"] <- renyi_shannon_gamma
-Data_storage$altshannonhillbeta[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"]<-renyi_shannon_gamma/renyi_avgshannon_a
+Data_storage$shannonhill[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"] <- renyi_shannon_gamma
+Data_storage$shannonhillbeta[Data_storage$Dispersal==DispV[i] & Data_storage$TEvoModel==TraitEvo[l] & Data_storage$ReplicateNum==j & Data_storage$Scale == "Regional"]<-renyi_shannon_gamma/renyi_avgshannon_a
    
     #At the regional scale
   com_data<-matrix(colSums(t(SIH_data[["Abund",i]][400,,])),1,nspecies)
