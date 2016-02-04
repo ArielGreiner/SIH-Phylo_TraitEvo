@@ -14,7 +14,7 @@ ggplot(Data_storage_total,aes(x=Dispersal,y=Mean_SR,color=interaction(Scale, TEv
 ggplot(Data_storage_total,aes(x=Dispersal,y=Mean_SR,color=interaction(Scale, TEvoModel),group=interaction(Scale, TEvoModel),fill=interaction(Scale, TEvoModel),alpha=0.1))+
   geom_line(size=2)+ #plots data as lines
   geom_ribbon(aes(ymin=Mean_SR-SD_SR,ymax=Mean_SR+SD_SR),width=0.1)+
-  facet_grid(Scale~TEvoModel,scale="free")+
+  facet_grid(TEvoModel~.,scale="free")+
   scale_x_log10(breaks=DispV)+ #sets x axis to log10 scale
   theme_bw(base_size = 18)+ #gets rid of grey background
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) #removes grid lines  
