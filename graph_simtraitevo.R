@@ -1,5 +1,6 @@
 require(dplyr) 
-Data_storage_total<-summarise(group_by(Data_storage, Dispersal, TEvoModel, Scale), Mean_SR=mean(SR,na.rm=T), SD_SR=sd(SR,na.rm=T), Mean_Biomass=mean(Biomass,na.rm=T), SD_Biomass=sd(Biomass,na.rm=T), Mean_PD=mean(PD,na.rm=T), SD_PD=sd(PD,na.rm=T), Mean_MPD_abund=mean(MPD_abund,na.rm=T), SD_MPD_abund=sd(MPD_abund,na.rm=T), Mean_MPD_pa=mean(MPD_pa,na.rm=T), SD_MPD_pa=sd(MPD_pa,na.rm=T), Mean_MNTD_abund=mean(MNTD_abund, na.rm=T), SD_MNTD_abund=sd(MNTD_abund,na.rm=T), Mean_MNTD_pa=mean(MNTD_pa,na.rm=T), SD_MNTD_pa=sd(MNTD_pa,na.rm=T), Mean_Kstat=mean(Kstat, na.rm=T), SD_Kstat=sd(Kstat, na.rm=T), Mean_shannonhill=mean(shannonhill, na.rm=T), SD_shannonhill=sd(shannonhill, na.rm=T), Mean_shannonhillbeta=mean(shannonhillbeta, na.rm=T), SD_shannonhillbeta=sd(shannonhillbeta, na.rm=T), Mean_altshannonhill=mean(altshannonhill, na.rm=T), SD_altshannonhill=sd(altshannonhill, na.rm=T), Mean_altshannonhillbeta=mean(altshannonhillbeta, na.rm=T), SD_altshannonhillbeta=sd(altshannonhillbeta, na.rm=T), Mean_speciessorting=mean(speciessorting, na.rm=T), SD_speciessorting=sd(speciessorting, na.rm=T), Mean_masseffects=mean(masseffects, na.rm=T), SD_masseffects=sd(masseffects, na.rm=T), Mean_basegrowth = mean(basegrowth, na.rm=T), SD_basegrowth = sd(basegrowth, na.rm=T))
+Data_storage_total<-summarise(group_by(Data_storage, Dispersal, TEvoModel, Scale), Mean_SR=mean(SR,na.rm=T), SD_SR=sd(SR,na.rm=T), Mean_Biomass=mean(Biomass,na.rm=T), SD_Biomass=sd(Biomass,na.rm=T), Mean_PD=mean(PD,na.rm=T), SD_PD=sd(PD,na.rm=T), Mean_MPD_abund=mean(MPD_abund,na.rm=T), SD_MPD_abund=sd(MPD_abund,na.rm=T), Mean_MPD_pa=mean(MPD_pa,na.rm=T), SD_MPD_pa=sd(MPD_pa,na.rm=T), Mean_MNTD_abund=mean(MNTD_abund, na.rm=T), SD_MNTD_abund=sd(MNTD_abund,na.rm=T), Mean_MNTD_pa=mean(MNTD_pa,na.rm=T), SD_MNTD_pa=sd(MNTD_pa,na.rm=T), Mean_Kstat=mean(Kstat, na.rm=T), SD_Kstat=sd(Kstat, na.rm=T), Mean_shannonhill=mean(shannonhill, na.rm=T), SD_shannonhill=sd(shannonhill, na.rm=T), Mean_shannonhillbeta=mean(shannonhillbeta, na.rm=T), SD_shannonhillbeta=sd(shannonhillbeta, na.rm=T), Mean_altshannonhill=mean(altshannonhill, na.rm=T), SD_altshannonhill=sd(altshannonhill, na.rm=T), Mean_altshannonhillbeta=mean(altshannonhillbeta, na.rm=T), SD_altshannonhillbeta=sd(altshannonhillbeta, na.rm=T), Mean_speciessorting=mean(speciessorting, na.rm=T), SD_speciessorting=sd(speciessorting, na.rm=T), Mean_masseffects=mean(masseffects, na.rm=T), SD_masseffects=sd(masseffects, na.rm=T), Mean_basegrowth = mean(basegrowth, na.rm=T), SD_basegrowth = sd(basegrowth, na.rm=T), Mean_sesMPD_abund_z = mean(sesMPD_abund_z,na.rm=T), SD_sesMPD_abund_z = sd(sesMPD_abund_z,na.rm=T),
+Mean_sesMPD_abund_p = mean(sesMPD_abund_p,na.rm=T), SD_sesMPD_abund_p = sd(sesMPD_abund_p,na.rm=T), Mean_sesMNTD_abund_z = mean(sesMNTD_abund_z,na.rm=T), SD_sesMNTD_abund_z = sd(sesMNTD_abund_z,na.rm=T), Mean_sesMNTD_abund_p = mean(sesMNTD_abund_p,na.rm=T), SD_sesMNTD_abund_p = sd(sesMNTD_abund_p,na.rm=T), sum_phylogeven_mpd = sum(phylogeven_mpd), sum_phylogeven_mntd = sum(phylogeven_mntd), sum_phylogcluster_mpd = sum(phylogcluster_mpd), sum_phylogcluster_mntd = sum(phylogcluster_mntd), sum_pe_pc_mpd = sum(phylogeven_mpd + phylogcluster_mpd), sum_pe_pc_mntd = sum(phylogeven_mntd + phylogcluster_mntd))
 
 require(ggplot2)
 #MPD abund vs dispersal rates and then look at 3 different levels of relationship between traits and the phylogeny
@@ -68,7 +69,16 @@ facet_grid(TEvoModel~.,scale="free")+
   scale_x_log10(breaks=DispV)+
 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
- 
+  
+  #Plotting p-value things relating to ses measures
+ggplot(Data_storage_total,aes(x=Dispersal,y=Mean_sesMPD_abund_z,color=factor(sum_pe_pc_mpd)/100,group=interaction(Scale, TEvoModel)))+
+  geom_line(size=1.5)+
+geom_errorbar(aes(ymin=Mean_sesMPD_abund_z-SD_sesMPD_abund_z,ymax=Mean_sesMPD_abund_z + SD_sesMPD_abund_z),width=0.1)+
+theme_bw(base_size = 15)+
+facet_grid(Scale~TEvoModel,scale="free")+
+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())+
+scale_x_log10(breaks=DispV)+
+theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
  
 
 #ignore under here, it doesn't work as it should...
