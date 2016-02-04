@@ -8,7 +8,7 @@ DispV<-c(0.0001,0.0005,0.001,0.005,0.01,0.05,0.1,0.5,1) #the dispersal rates
 TraitEvo<-c("BM", "random")  
 reps <- seq(from = 1, to = nreplicates, by = 1)
 
-Data_storage<-data.frame(SR=NA,Biomass=NA,Biomass_CV=NA,PD=NA,MPD_abund=NA,MPD_pa=NA,MNTD_pa = NA, MNTD_abund=NA, sesMPD_abund_z = NA, sesMPD_abund_p = NA, sesMNTD_abund_p = NA, sesMNTD_abund_z = NA, phylogcluster_mntd = NA, phylogcluster_mpd = NA, phylogeven_mntd = NA, phylogeven_mpd = NA, Kstat = NA, shannonhill = NA, shannonhillbeta = NA, speciessorting = NA, masseffects = NA, basegrowth = NA, Dispersal=rep(DispV,each=nreplicates*length(TraitEvo)),TEvoModel=factor(TraitEvo), ReplicateNum=rep(reps,each=length(TraitEvo)),
+Data_storage<-data.frame(SR=NA,Biomass=NA,Biomass_CV=NA,PD=NA,MPD_abund=NA,MPD_pa=NA,MNTD_pa = NA, MNTD_abund=NA, sesMPD_abund_z = NA, sesMPD_abund_p = NA, sesMNTD_abund_p = NA, sesMNTD_abund_z = NA, phylogcluster_mntd = 0, phylogcluster_mpd = 0, phylogeven_mntd = 0, phylogeven_mpd = 0, Kstat = NA, shannonhill = NA, shannonhillbeta = NA, speciessorting = NA, masseffects = NA, basegrowth = NA, Dispersal=rep(DispV,each=nreplicates*length(TraitEvo)),TEvoModel=factor(TraitEvo), ReplicateNum=rep(reps,each=length(TraitEvo)),
 Scale=rep(c("Local","Regional"),each=length(DispV)*nreplicates*length(TraitEvo))) #building the data frame
 
 MTraits<-t(matrix(1,nspecies,nfunctions))
