@@ -50,7 +50,6 @@ traitsfinal<-cbind(traits.stand, traits.stand2, traits.stand3_fixed)
 traitsfinal<-traitsfinal[sample(nrow(traitsfinal)),]
 
 } 
-###NEED TO FIX BELOW HERE STILL###
 #trait values -> model parameters
 #species environmental optima (H)
 if(eff_vary==T){eOptimum1<-traitsfinal[,1]
